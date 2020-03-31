@@ -21,11 +21,11 @@ def set_global(args):
     output_dir = args["output_path"]
     arch = ops.getEnv("ARCH_ALT")
     if arch == "armhf":
-        src_lib_dir = iopc.getBaseRootFile("lib/arm-linux-gnueabihf")
+        src_lib_dir = iopc.getBaseRootFile("usr/lib/arm-linux-gnueabihf")
     elif arch == "armel":
-        src_lib_dir = iopc.getBaseRootFile("lib/arm-linux-gnueabi")
+        src_lib_dir = iopc.getBaseRootFile("usr/lib/arm-linux-gnueabi")
     elif arch == "x86_64":
-        src_lib_dir = iopc.getBaseRootFile("lib/x86_64-linux-gnu")
+        src_lib_dir = iopc.getBaseRootFile("usr/lib/x86_64-linux-gnu")
     else:
         sys.exit(1)
     dst_lib_dir = ops.path_join(output_dir, "lib")
@@ -42,10 +42,12 @@ def MAIN_EXTRACT(args):
     set_global(args)
 
     ops.mkdir(dst_lib_dir)
-    ops.copyto(ops.path_join(src_lib_dir, "libidn.so.11.6.16"), dst_lib_dir)
-    ops.ln(dst_lib_dir, "libidn.so.11.6.16", "libidn.so.11.6")
-    ops.ln(dst_lib_dir, "libidn.so.11.6.16", "libidn.so.11")
-    ops.ln(dst_lib_dir, "libidn.so.11.6.16", "libidn.so")
+
+    lib_so = "libidn.so.11.6.12"
+    ops.copyto(ops.path_join(src_lib_dir, lib_so), dst_lib_dir)
+    ops.ln(dst_lib_dir, lib_so, "libidn.so.11.6")
+    ops.ln(dst_lib_dir, lib_so, "libidn.so.11")
+    ops.ln(dst_lib_dir, lib_so, "libidn.so")
     return True
 
 def MAIN_PATCH(args, patch_group_name):
